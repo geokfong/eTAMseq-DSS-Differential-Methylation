@@ -2,9 +2,9 @@
 for gen in WT KO; do 
     for treatment in UT BT2 BT4; do 
         for rep in 1 2; do 
-            input_1="/home/onggf/data/2_eTAM/result/bed/result/final_output/${gen}_${treatment}_${rep}.ivtcount.table.out.txt"
-            input_2="/home/onggf/data/2_eTAM/result/bed/result/${gen}_${treatment}_${rep}.eTAMInput.tsv"
-            output_file="/home/onggf/data/2_eTAM/result/bed/result/final_output/dss/${gen}_${treatment}_${rep}.dss.txt"
+            input_1="/path/to/result/bed/result/final_output/${gen}_${treatment}_${rep}.ivtcount.table.out.txt"
+            input_2="/path/to/result/bed/result/${gen}_${treatment}_${rep}.eTAMInput.tsv"
+            output_file="/path/to/result/bed/result/final_output/dss/${gen}_${treatment}_${rep}.dss.txt"
             echo "Running ${gen}_${treatment}_${rep}"
             sort -k1,1 "$input_1" -o "$input_1"
             sort -k1,1 "$input_2" -o "$input_2"
