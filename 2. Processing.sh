@@ -9,17 +9,17 @@ hisat-3n-build --base-change A,G Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFa
 
 ## Step 2: Processing files
 hisat3n_rep_index_name=rRNA
-hisat3n_rep_index=/home/onggf/data/2_eTAM/rRNA/$hisat3n_rep_index_name
+hisat3n_rep_index=path/to/rRNA/$hisat3n_rep_index_name
 hisat3n_index_name=GRCh38
-hisat3n_index=/home/onggf/data/2_eTAM/hg38/$hisat3n_index_name
-hisat3n_out_dir=/home/onggf/data/2_eTAM/result
-rep_fa=/home/onggf/data/2_eTAM/rRNA/rRNA.fasta
-genome_fa=/home/onggf/data/2_eTAM/hg38/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa
+hisat3n_index=path/to/hg38/$hisat3n_index_name
+hisat3n_out_dir=path/to/result
+rep_fa=path/to/rRNA/rRNA.fasta
+genome_fa=path/to/hg38/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa
 ncpus=24
 A2G_percent=0.5
 cov=1
 strandness="F"
-parent_folder='/home/onggf/data/2_eTAM/X401SC23022423-Z01-F003/01.RawData/'
+parent_folder='path/to/data/01.RawData/'
 
 mamba activate eTAM
 
@@ -33,7 +33,7 @@ do
     echo "$r2"
     echo "$sample"
 
-    cd /home/onggf/data/2_eTAM/X401SC23022423-Z01-F003/02_processed/
+    cd path/to/data/02_processed/
     mkdir -p "$sample"
     cd "$sample"
 
@@ -63,7 +63,7 @@ do
     samtools index $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.bam
     samtools stats -r $rep_fa $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.bam > $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.stats
     samtools view -@ $ncpus -hb -e "([Yf]+[Zf]>0) && ([Yf]/([Yf]+[Zf])>=$A2G_percent)" $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.bam | samtools sort -T $hisat3n_out_dir/$sample -@ $ncpus -o $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.flt.bam -
-    /home/onggf/data/2_eTAM/pileup2var-1.1.0/pileup2var -f 524 -s $strandness -g $rep_fa -b $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.flt.bam -o $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.pileup2var.flt.txt
+    /path/to/pileup2var-1.1.0/pileup2var -f 524 -s $strandness -g $rep_fa -b $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.align.sorted.flt.bam -o $hisat3n_out_dir/$sample/$sample.$hisat3n_rep_index_name.pileup2var.flt.txt
 
     # Step 2.4: Genome mapping
     echo -e "\nhisat3n align -- genome mapping\n"
@@ -80,6 +80,6 @@ do
     samtools index $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.bam
     samtools stats -r $genome_fa $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.bam > $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.stats
     samtools view -@ $ncpus -hb -e "([Yf]+[Zf]>0) && ([Yf]/([Yf]+[Zf])>=$A2G_percent)" $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.bam | samtools sort -T $hisat3n_out_dir/$sample -@ $ncpus -o $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.flt.bam -
-    /home/onggf/data/2_eTAM/pileup2var-1.1.0/pileup2var -t $ncpus -f 524 -a A -c $cov -s $strandness -g $genome_fa -b $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.flt.bam -o $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.pileup2var.flt.txt
+    /path/to/pileup2var-1.1.0/pileup2var -t $ncpus -f 524 -a A -c $cov -s $strandness -g $genome_fa -b $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.align.sorted.dedup.flt.bam -o $hisat3n_out_dir/$sample/$sample.$hisat3n_index_name.pileup2var.flt.txt
 
 done
